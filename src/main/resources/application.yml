@@ -1,7 +1,7 @@
 # Database Configuration
 spring:
   config:
-    import: setting.yml
+    import: env.yml
   datasource:
     url: jdbc:mysql://localhost/${DB_DATABASE}?useSSL=false&serverTimezone=UTC
     username: ${DB_USERNAME}

@@ -1,9 +1,11 @@
 # Database Configuration
 spring:
+  config:
+    import: classpath:settings.yml
   datasource:
-    url: jdbc:mysql://localhost/gatewayDb?useSSL=false&serverTimezone=UTC
-    username: root
-    password: root
+    url: jdbc:mysql://localhost/${DB_DATABASE}?useSSL=false&serverTimezone=UTC
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   # Hibernate Configuration
   jpa:

@@ -15,7 +15,7 @@ public class GlobalExceptionHandlers  {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ApiResponse<String> handleNotFoundException(RuntimeException ex){
+    public ApiResponse<String> handleRuntimeException(RuntimeException ex){
         return  new ApiResponse<>("Failed","Error: " + ex.getMessage(), null);
     }
 
@@ -23,6 +23,22 @@ public class GlobalExceptionHandlers  {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ApiResponse<String> handleValidationException(ValidationException ex){
+        log.error(ex);
+        return  new ApiResponse<>("Failed","Error: "+ex.getMessage(), null);
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ApiResponse<String> handleException(Exception ex){
+        log.error(ex);
+        return  new ApiResponse<>("Failed","Error: "+ex.getMessage(), null);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ApiResponse<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex){
         log.error(ex);
         return  new ApiResponse<>("Failed","Error: "+ex.getMessage(), null);
     }

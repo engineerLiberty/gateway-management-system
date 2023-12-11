@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name = "gateway")
 public class Gateway {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

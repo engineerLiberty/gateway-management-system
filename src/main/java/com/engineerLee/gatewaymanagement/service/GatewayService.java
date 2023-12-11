@@ -1,5 +1,6 @@
 package com.engineerLee.gatewaymanagement.service;
 
+import com.engineerLee.gatewaymanagement.dto.AddPeripheralRequest;
 import com.engineerLee.gatewaymanagement.dto.ApiResponse;
 import com.engineerLee.gatewaymanagement.dto.GateWayRequest;
 import com.engineerLee.gatewaymanagement.model.Gateway;
@@ -11,15 +12,15 @@ import java.util.List;
 @Service
 public interface GatewayService {
 
-    List<ApiResponse<Gateway>> getAllGateways();
+    ApiResponse<?> getAllGateways();
 
-    ApiResponse<Gateway> getGatewayBySerialNumber(String serialNumber);
+    ApiResponse<?> getGatewayBySerialNumber(String serialNumber);
 
     ApiResponse<Gateway> saveGateway(GateWayRequest gateWayRequest);
 
     void deleteGateway(String serialNumber);
 
-    void addPeripheralDevice(String serialNumber, PeripheralDevice device);
+    ApiResponse<?> addPeripheralDevice(AddPeripheralRequest request);
 
     void removePeripheralDevice(String serialNumber, Long deviceId);
 }

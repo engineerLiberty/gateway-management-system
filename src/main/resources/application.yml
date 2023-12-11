@@ -1,7 +1,10 @@
-# Database Configuration
+
+# Configuration  Secrets
 spring:
   config:
     import: env.yml
+
+# Database Configuration
   datasource:
     url: jdbc:mysql://localhost/${DB_DATABASE}?useSSL=false&serverTimezone=UTC
     username: ${DB_USERNAME}
@@ -10,7 +13,7 @@ spring:
   # Hibernate Configuration
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:

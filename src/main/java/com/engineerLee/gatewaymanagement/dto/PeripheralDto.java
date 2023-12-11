@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class PeripheralDto {
     private String vendor;
-    private LocalDate dateCreated;
     private boolean online;
 
 }

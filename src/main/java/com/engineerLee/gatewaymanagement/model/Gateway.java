@@ -24,4 +24,5 @@ public class Gateway {
 
     @OneToMany(mappedBy = "gateway", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PeripheralDevice> peripheralDevices;
+
 }

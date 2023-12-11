@@ -19,8 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GateWayRequest {
-    private String serialNumber;
     private String name;
     private String ipAddress;
-    private List<String> peripheralDevices;
+//    private List<String> peripheralDevices;
 }

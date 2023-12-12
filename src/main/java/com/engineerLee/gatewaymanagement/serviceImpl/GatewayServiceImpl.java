@@ -50,21 +50,18 @@ public class GatewayServiceImpl implements GatewayService {
     @Override
     public ApiResponse<Gateway> saveGateway(GateWayRequest gateWayRequest) {
         try {
+
             if (gateWayRequest.getName() == null ||
                     gateWayRequest.getIpAddress() == null)
             {
                 return new ApiResponse<>("Failed", "Gateway fields cannot be null", null);
             }
-
-            List<PeripheralDevice> peripheralDevices = new ArrayList<>();
             PeripheralDevice peripheralDevice = new PeripheralDevice();
             peripheralDevice.setDateCreated(LocalDate.now());
-            peripheralDevices.add(peripheralDevice);
             Gateway gateway = new Gateway();
             gateway.setName(gateWayRequest.getName());
             gateway.setIpAddress(gateWayRequest.getIpAddress());
             gateway.setSerialNumber(UUID.randomUUID().toString());
-//            gateway.setPeripheralDevices(peripheralDevices);
             gatewayRepo.save(gateway);
             return new ApiResponse<>("Success", "Gateway saved successfully",gateway);
         } catch (DataIntegrityViolationException e) {
@@ -90,18 +87,24 @@ public class GatewayServiceImpl implements GatewayService {
     @Override
     public ApiResponse<?> addPeripheralDevice(AddPeripheralRequest request) {
         log.info("addPeripheralDevice method invoked for serialNumber: {}", request.getSerialNumber());
-
-        Gateway gateway = gatewayRepo.findBySerialNumber(request.getSerialNumber());
         PeripheralDevice  peripheralDevice = new PeripheralDevice();
+        Gateway gateway = gatewayRepo.findBySerialNumber(request.getSerialNumber());
+
         if (gateway != null) {
             log.info("Gateway found for serialNumber: {}", request.getSerialNumber());
 
-            peripheralDevice.setVendor(request.getPeripheralDto().getVendor());
-            peripheralDevice.setDateCreated(LocalDate.now());
-            peripheralDevice.setOnline(true);
-            peripheralDevice.setGateway(gateway);
-            peripheralDeviceRepo.save(peripheralDevice);
-            log.info("Peripheral device saved: {}", peripheralDevice);
+            if (gateway.getPeripheralDevices().size() <= 10) {
+                peripheralDevice.setVendor(request.getVendor());
+                peripheralDevice.setDateCreated(LocalDate.now());
+                peripheralDevice.setOnline(true);
+                peripheralDevice.setGateway(gateway);
+                peripheralDeviceRepo.save(peripheralDevice);
+                log.info("Peripheral device saved: {}", peripheralDevice);
+
+            } else {
+                throw new ValidationException("Gateway cannot have more than 10 peripheral devices.");
+            }
+
         } else {
             throw new ValidationException("Invalid serial number: " + request.getSerialNumber());
         }
@@ -114,11 +117,19 @@ public class GatewayServiceImpl implements GatewayService {
     }
 
     @Override
-    public void removePeripheralDevice(String serialNumber, Long deviceId) {
+    @Transactional
+    public ApiResponse<?> removePeripheralDevice(String serialNumber, Long deviceId) {
         Gateway gateway = gatewayRepo.findBySerialNumber(serialNumber);
         PeripheralDevice peripheralDevice = peripheralDeviceRepo.findByGateway(gateway);
         if (peripheralDevice != null && Objects.equals(peripheralDevice.getUid(), deviceId)){
-            peripheralDeviceRepo.deleteByUid(deviceId);
+            peripheralDeviceRepo.deleteByGateway(gateway);
+            log.info("Peripheral device removed successfully: "+deviceId);
+
         }
+        return ApiResponse.builder()
+                .status("SUCCESS")
+                .message("Device: "+deviceId+ " successfully")
+                .data(null)
+                .build();
     }
 }

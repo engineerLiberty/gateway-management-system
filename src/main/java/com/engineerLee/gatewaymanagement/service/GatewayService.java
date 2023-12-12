@@ -22,6 +22,6 @@ public interface GatewayService {
 
     ApiResponse<?> addPeripheralDevice(AddPeripheralRequest request);
 
-    void removePeripheralDevice(String serialNumber, Long deviceId);
+    ApiResponse<?> removePeripheralDevice(String serialNumber, Long deviceId);
 }
 

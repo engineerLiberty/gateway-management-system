@@ -2,7 +2,7 @@
 # Configuration  Secrets
 spring:
   config:
-    import: env.yml
+    import: settings.yml
 
 # Database Configuration
   datasource:

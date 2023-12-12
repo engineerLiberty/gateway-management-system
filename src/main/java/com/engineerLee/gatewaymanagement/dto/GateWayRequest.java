@@ -21,5 +21,4 @@ import java.util.List;
 public class GateWayRequest {
     private String name;
     private String ipAddress;
-//    private List<String> peripheralDevices;
 }

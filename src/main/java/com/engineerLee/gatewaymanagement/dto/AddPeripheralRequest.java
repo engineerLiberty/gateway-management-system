@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddPeripheralRequest {
     private String serialNumber;
-    PeripheralDto peripheralDto;
+    private String vendor;
 }

@@ -6,6 +6,7 @@ import com.engineerLee.gatewaymanagement.dto.GateWayRequest;
 import com.engineerLee.gatewaymanagement.model.Gateway;
 import com.engineerLee.gatewaymanagement.service.GatewayService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,11 +26,13 @@ public class GatewayController {
     }
 
     @PostMapping ("addGateWay")
+    @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<Gateway> saveGateway(@RequestBody GateWayRequest gateWayRequest) {
         return gatewayService.saveGateway(gateWayRequest);
     }
 
     @DeleteMapping("/{serialNumber}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void deleteGateway(@PathVariable String serialNumber) {
         gatewayService.deleteGateway(serialNumber);
     }
@@ -40,9 +43,10 @@ public class GatewayController {
     }
 
     @DeleteMapping("removePeripheralDevice")
-    public void removePeripheralDevice(
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<?> removePeripheralDevice(
             @RequestParam("serialNumber") String serialNumber,
             @RequestParam("deviceId") Long deviceId) {
-        gatewayService.removePeripheralDevice(serialNumber, deviceId);
+        return gatewayService.removePeripheralDevice(serialNumber, deviceId);
     }
 }
